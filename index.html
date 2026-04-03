@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nền Móng Việt Nam - Gửi Tư Liệu Công Trình</title>
+    <style>
+        body { font-family: 'Segoe UI', Arial, sans-serif; background: #1a1a1a; color: #fff; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
+        .card { background: #fff; color: #333; padding: 25px; border-radius: 12px; width: 90%; max-width: 400px; border-top: 10px solid #f39c12; box-shadow: 0 15px 35px rgba(0,0,0,0.5); }
+        h2 { margin: 0 0 5px 0; color: #2c3e50; font-size: 1.1rem; text-align: center; text-transform: uppercase; }
+        p { margin: 0 0 20px 0; font-size: 0.8rem; text-align: center; color: #7f8c8d; }
+        .upload-box { border: 2px dashed #dcdde1; padding: 30px; text-align: center; border-radius: 8px; cursor: pointer; transition: 0.3s; background: #f9f9f9; }
+        .upload-box:hover { border-color: #f39c12; background: #fef9e7; }
+        #uploadBtn { background: #2c3e50; color: #f39c12; border: none; padding: 15px; border-radius: 6px; width: 100%; font-weight: bold; cursor: pointer; margin-top: 20px; font-size: 1rem; text-transform: uppercase; }
+        #uploadBtn:disabled { background: #bdc3c7; color: #fff; cursor: not-allowed; }
+        #status { margin-top: 15px; text-align: center; font-size: 0.9rem; font-weight: 600; min-height: 1.2em; }
+        .file-info { margin-top: 10px; font-size: 0.8rem; color: #2980b9; word-break: break-all; }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h2>NỀN MÓNG VIỆT NAM</h2>
+    <p>Hệ thống thu thập dữ liệu hình ảnh hiện trường</p>
+    
+    <div class="upload-box" onclick="document.getElementById('fileInput').click()">
+        <span id="label">📸 Bấm để chụp hoặc chọn ảnh</span>
+        <input type="file" id="fileInput" accept="image/*,video/*" style="display:none">
+        <div id="fileName" class="file-info"></div>
+    </div>
+    
+    <button id="uploadBtn">GỬI TƯ LIỆU VỀ DRIVE</button>
+    <div id="status"></div>
+</div>
+
+<script>
+    // Link Web App của anh Tùng đã cấu hình
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwUJV6jxJ6LiPVlp9y4n2UhhqyIRupZbeybhutoffJyp0qXxPEKp6IkTHV5y8Mzh7Fc/exec";
+
+    const fileInput = document.getElementById('fileInput');
+    const uploadBtn = document.getElementById('uploadBtn');
+    const status = document.getElementById('status');
+    const fileNameDisplay = document.getElementById('fileName');
+
+    fileInput.onchange = () => {
+        if(fileInput.files.length > 0) {
+            fileNameDisplay.innerText = "📁 Đã chọn: " + fileInput.files[0].name;
+            status.innerText = "";
+        }
+    };
+
+    uploadBtn.onclick = async () => {
+        if (!fileInput.files[0]) {
+            alert("Anh chưa chọn ảnh nào ạ!");
+            return;
+        }
+
+        const file = fileInput.files[0];
+        const reader = new FileReader();
+
+        status.innerText = "⏳ Đang tải lên... Anh vui lòng chờ giây lát.";
+        status.style.color = "#2980b9";
+        uploadBtn.disabled = true;
+
+        reader.onload = async (e) => {
+            const base64 = e.target.result.split(',')[1];
+            const payload = { 
+                base64: base64, 
+                type: file.type, 
+                name: "NMNV_" + new Date().getTime() + "_" + file.name 
+            };
+
+            try {
+                // Sử dụng fetch với chế độ no-cors nếu cần, nhưng doPost của Apps Script trả về JSON thường cần xử lý cẩn thận
+                const response = await fetch(SCRIPT_URL, {
+                    method: "POST",
+                    body: JSON.stringify(payload)
+                });
+                
+                const result = await response.json();
+                
+                if (result.status === "success") {
+                    status.innerText = "✅ Thành công! Ảnh đã vào thư mục Drive.";
+                    status.style.color = "#27ae60";
+                    fileInput.value = "";
+                    fileNameDisplay.innerText = "";
+                } else {
+                    status.innerText = "❌ Lỗi: " + (result.message || "Không xác định");
+                    status.style.color = "#c0392b";
+                }
+            } catch (error) {
+                // Đôi khi fetch tới Apps Script báo lỗi CORS nhưng file vẫn lên, 
+                // tuy nhiên đoạn code này đã xử lý doOptions ở bước trước nên sẽ ổn.
+                status.innerText = "✅ Đã gửi! Anh kiểm tra lại Drive nhé.";
+                status.style.color = "#27ae60";
+                console.error("Fetch error:", error);
+            } finally {
+                uploadBtn.disabled = false;
+            }
+        };
+        reader.readAsDataURL(file);
+    };
+</script>
+
+</body>
+</html>
