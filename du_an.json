@@ -1,6 +1,6 @@
 {
  "endpoint": "https://script.google.com/macros/s/AKfycbz1gfMBxNKrVUdAZQwUXF5snLuD4YqdJ7gFffNK-EArMIHV4ns0cOo1eL4VIGND14Dg5w/exec",
- "_ghi_chu": "endpoint = Apps Script gộp (đã triển khai 20/11/2026). Dự án có endpoint riêng thì dùng script cũ. Khách mới: chỉ cần gửi link ?p=<ma-khach>, không cần khai báo ở đây.",
+ "_ghi_chu": "Tất cả dự án dùng 1 endpoint chung (Apps Script Gui_Anh_Chung) -> 1 thư mục Drive KHO_ANH_DU_AN. Khách mới: chỉ cần link ?p=<ma-khach>.",
  "projects": {
   "ban-dinh": {
    "ten": "Fanpage Bạn Định",
@@ -63,7 +63,6 @@
    "ten": "Nền Móng Việt Nam",
    "mau": "#f39c12",
    "watermark": "Nền Móng Việt Nam",
-   "endpoint": "https://script.google.com/macros/s/AKfycbwUJV6jxJ6LiPVlp9y4n2UhhqyIRupZbeybhutoffJyp0qXxPEKp6IkTHV5y8Mzh7Fc/exec",
    "categories": [
     [
      "May_Moc_Thiet_Bi",
@@ -87,7 +86,6 @@
    "ten": "Xe Ghép Khánh Quỳnh",
    "mau": "#16a085",
    "watermark": "",
-   "endpoint": "https://script.google.com/macros/s/AKfycbzDz2aXhXup6i2tBsIDBJlAQc_rXenxMysp_wb8oTdY1c2g1Wi9dlgWNnVRPTNh907t/exec",
    "categories": [
     [
      "Anh_Xe_Ngoai_That",
@@ -115,7 +113,6 @@
    "ten": "Thanh lý & Bể hải sản cũ",
    "mau": "#8e44ad",
    "watermark": "",
-   "endpoint": "https://script.google.com/macros/s/AKfycbwJSYyuuE5Rwhy18sH0xaURtUyBdDlm9HaS-zfcKn0TgoLQl5-rRbBEQE302T3K6ddaYg/exec",
    "categories": [
     [
      "Be_Hai_San_Cu",
