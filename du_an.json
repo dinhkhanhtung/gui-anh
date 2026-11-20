@@ -4,7 +4,6 @@
  "projects": {
   "ban-dinh": {
    "ten": "Fanpage Bạn Định",
-   "mau": "#2980b9",
    "watermark": "",
    "categories": [
     [
@@ -23,7 +22,6 @@
   },
   "ha-thao-moc": {
    "ten": "Hà Thảo Mộc Ninh Bình",
-   "mau": "#27ae60",
    "watermark": "",
    "categories": [
     [
@@ -42,7 +40,6 @@
   },
   "hoa-nha-tham": {
    "ten": "Hoa Nhà Thắm Trần Sóc Sơn",
-   "mau": "#e84393",
    "watermark": "",
    "categories": [
     [
@@ -61,7 +58,6 @@
   },
   "khoan-coc": {
    "ten": "Nền Móng Việt Nam",
-   "mau": "#f39c12",
    "watermark": "Nền Móng Việt Nam",
    "categories": [
     [
@@ -84,7 +80,6 @@
   },
   "xe-khanh-quynh": {
    "ten": "Xe Ghép Khánh Quỳnh",
-   "mau": "#16a085",
    "watermark": "",
    "categories": [
     [
@@ -111,7 +106,6 @@
   },
   "thanh-ly": {
    "ten": "Thanh lý & Bể hải sản cũ",
-   "mau": "#8e44ad",
    "watermark": "",
    "categories": [
     [
