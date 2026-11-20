@@ -3,104 +3,141 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nền Móng Việt Nam - Hệ thống Pro</title>
+    <title>Gửi ảnh về Drive</title>
     <style>
+        :root { --mau: #f39c12; }
         body { font-family: 'Segoe UI', Arial, sans-serif; background: #1a1a1a; color: #fff; padding: 20px; display: flex; justify-content: center; }
-        .card { background: #fff; color: #333; padding: 20px; border-radius: 12px; width: 100%; max-width: 500px; border-top: 10px solid #f39c12; }
-        h2 { text-align: center; color: #2c3e50; font-size: 1.2rem; margin-bottom: 5px; }
+        .card { background: #fff; color: #333; padding: 20px; border-radius: 12px; width: 100%; max-width: 500px; border-top: 10px solid var(--mau); }
+        h2 { text-align: center; color: #2c3e50; font-size: 1.2rem; margin: 0 0 5px; }
+        .sub { text-align: center; font-size: 0.8rem; margin: 0 0 15px; }
         .form-group { margin-bottom: 15px; }
         label { font-weight: bold; font-size: 0.9rem; display: block; margin-bottom: 5px; }
-        select, input[type="text"] { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; }
+        select { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; }
         .options { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; background: #f9f9f9; padding: 10px; border-radius: 8px; margin-bottom: 15px; }
-        .upload-box { border: 2px dashed #f39c12; padding: 20px; text-align: center; cursor: pointer; border-radius: 8px; margin-bottom: 15px; background: #fffcf5; }
-        #uploadBtn { background: #2c3e50; color: #f39c12; border: none; padding: 15px; border-radius: 6px; width: 100%; font-weight: bold; cursor: pointer; font-size: 1rem; }
+        .options label { font-weight: normal; margin: 0; }
+        .upload-box { border: 2px dashed var(--mau); padding: 20px; text-align: center; cursor: pointer; border-radius: 8px; margin-bottom: 15px; }
+        #uploadBtn { background: #2c3e50; color: #fff; border: none; padding: 15px; border-radius: 6px; width: 100%; font-weight: bold; cursor: pointer; font-size: 1rem; }
+        #uploadBtn:disabled { opacity: .5; }
         #resultArea { margin-top: 15px; font-size: 0.8rem; background: #eee; padding: 10px; border-radius: 5px; display: none; max-height: 150px; overflow-y: auto; }
         .status-msg { text-align: center; margin-top: 10px; font-weight: bold; font-size: 0.9rem; }
+        .menu a { display: block; padding: 12px; margin-bottom: 8px; border-radius: 6px; background: #f4f4f4; color: #2c3e50; text-decoration: none; font-weight: bold; border-left: 6px solid var(--c); }
     </style>
 </head>
 <body>
 
-<div class="card">
-    <h2>NỀN MÓNG VIỆT NAM</h2>
-    <p style="text-align:center; font-size:0.8rem; margin-top:0;">Hệ thống xử lý ảnh hiện trường tự động</p>
-
-    <div class="form-group">
-        <label>1. Phân loại danh mục (Auto Folder)</label>
-        <select id="category">
-            <option value="May_Moc_Thiet_Bi">Máy móc & Thiết bị</option>
-            <option value="Nhan_Su_Cong_Truong">Nhân sự công trường</option>
-            <option value="Tien_Do_Thi_Cong">Tiến độ thi công</option>
-            <option value="Bien_Ban_Nghiem_Thu">Biên bản & Nghiệm thu</option>
-        </select>
-    </div>
-
-    <div class="options">
-        <label><input type="checkbox" id="compress" checked> Nén ảnh (Giảm dung lượng)</label>
-        <label><input type="checkbox" id="watermark" checked> Đóng dấu logo/text</label>
-        <label><input type="checkbox" id="copyUrl"> Tự động Copy URL</label>
-        <label><input type="checkbox" id="showResult"> Hiện danh sách kết quả</label>
-    </div>
-
-    <div class="upload-box" onclick="document.getElementById('fileInput').click()">
-        <span id="labelText">📸 Chọn hoặc Chụp nhiều ảnh</span>
-        <input type="file" id="fileInput" accept="image/*" multiple style="display:none">
-    </div>
-
-    <button id="uploadBtn">XỬ LÝ & GỬI VỀ DRIVE</button>
-    <div id="status" class="status-msg"></div>
-    <div id="resultArea"></div>
+<div class="card" id="card">
+    <h2 id="title">Đang tải...</h2>
+    <p class="sub" id="sub"></p>
+    <div id="body"></div>
 </div>
 
 <canvas id="canvas" style="display:none;"></canvas>
 
 <script>
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwUJV6jxJ6LiPVlp9y4n2UhhqyIRupZbeybhutoffJyp0qXxPEKp6IkTHV5y8Mzh7Fc/exec";
+(async function () {
+    const $ = (id) => document.getElementById(id);
+    const card = $('card'), body = $('body');
+    const pid0 = new URLSearchParams(location.search).get('p');
 
-    const fileInput = document.getElementById('fileInput');
-    const uploadBtn = document.getElementById('uploadBtn');
-    const status = document.getElementById('status');
-    const resultArea = document.getElementById('resultArea');
+    let cfg;
+    try {
+        cfg = await (await fetch('du_an.json', { cache: 'no-cache' })).json();
+    } catch (e) {
+        $('title').innerText = 'Không tải được cấu hình';
+        return;
+    }
 
-    fileInput.onchange = () => {
-        document.getElementById('labelText').innerText = "Đã chọn " + fileInput.files.length + " ảnh";
-    };
+    // Không có ?p= hoặc sai mã -> hiện danh sách dự án
+    // Link cũ (không có ?p=) vẫn mở đúng dự án mặc định; thêm ?p=menu để xem danh sách
+    const pid = pid0 === null && cfg.mac_dinh ? cfg.mac_dinh : (pid0 === 'menu' ? null : pid0);
+    let proj = cfg.projects[pid];
+    // Khách mới: mã hợp lệ nhưng chưa có trong du_an.json -> dùng cấu hình mặc định,
+    // thư mục Drive tự tạo ở lần gửi ảnh đầu tiên (không cần tạo trước).
+    if (!proj && pid && /^[a-z0-9][a-z0-9-]{1,39}$/.test(pid)) {
+        proj = {
+            ten: pid.replace(/-/g, ' ').replace(/\b\w/g, (m) => m.toUpperCase()),
+            mau: '#34495e',
+            watermark: '',
+            categories: cfg.mac_dinh_nhom
+        };
+    }
+    if (!proj) {
+        $('title').innerText = 'Gửi ảnh về Drive';
+        $('sub').innerText = pid ? 'Không thấy dự án "' + pid + '". Chọn lại:' : 'Chọn dự án của bạn:';
+        body.className = 'menu';
+        Object.entries(cfg.projects).forEach(([k, v]) => {
+            const a = document.createElement('a');
+            a.href = '?p=' + k; a.textContent = v.ten;
+            a.style.setProperty('--c', v.mau || '#999');
+            body.appendChild(a);
+        });
+        return;
+    }
 
-    // Hàm nén và đóng dấu ảnh bằng Canvas
-    async function processImage(file) {
-        return new Promise((resolve) => {
+    const endpoint = proj.endpoint || cfg.endpoint;
+    document.documentElement.style.setProperty('--mau', proj.mau || '#f39c12');
+    document.title = proj.ten + ' - Gửi ảnh';
+    $('title').innerText = proj.ten.toUpperCase();
+    $('sub').innerText = 'Chọn nhóm, chọn ảnh, bấm gửi. Ảnh tự vào Drive.';
+
+    body.innerHTML = `
+        <div class="form-group">
+            <label>1. Ảnh thuộc nhóm nào?</label>
+            <select id="category"></select>
+        </div>
+        <div class="options">
+            <label><input type="checkbox" id="compress" checked> Nén ảnh (nhẹ hơn)</label>
+            <label><input type="checkbox" id="watermark" ${proj.watermark ? 'checked' : ''}> Đóng dấu chữ</label>
+            <label><input type="checkbox" id="copyUrl"> Tự copy link</label>
+            <label><input type="checkbox" id="showResult" checked> Hiện danh sách kết quả</label>
+        </div>
+        <div class="upload-box" id="pick"><span id="labelText">📸 Chọn hoặc chụp nhiều ảnh</span>
+            <input type="file" id="fileInput" accept="image/*" multiple style="display:none"></div>
+        <button id="uploadBtn">GỬI VỀ DRIVE</button>
+        <div id="status" class="status-msg"></div>
+        <div id="resultArea"></div>`;
+
+    const sel = $('category');
+    proj.categories.forEach(([v, t]) => sel.add(new Option(t, v)));
+
+    const fileInput = $('fileInput'), uploadBtn = $('uploadBtn'), status = $('status'), resultArea = $('resultArea');
+    $('pick').onclick = () => fileInput.click();
+    fileInput.onchange = () => { $('labelText').innerText = 'Đã chọn ' + fileInput.files.length + ' ảnh'; };
+
+    if (!endpoint) {
+        status.innerText = '⚠️ Dự án này chưa được nối với Drive.';
+        status.style.color = '#c0392b';
+        uploadBtn.disabled = true;
+    }
+
+    function processImage(file) {
+        return new Promise((resolve, reject) => {
             const reader = new FileReader();
-            reader.onload = (event) => {
+            reader.onerror = reject;
+            reader.onload = (ev) => {
                 const img = new Image();
+                img.onerror = reject;
                 img.onload = () => {
-                    const canvas = document.getElementById('canvas');
-                    const ctx = canvas.getContext('2d');
-                    
-                    // Thiết lập kích thước nén (ví dụ tối đa 1200px)
-                    let width = img.width;
-                    let height = img.height;
-                    const max_size = 1200;
-                    if (document.getElementById('compress').checked) {
-                        if (width > height && width > max_size) { height *= max_size / width; width = max_size; }
-                        else if (height > max_size) { width *= max_size / height; height = max_size; }
+                    const canvas = $('canvas'), ctx = canvas.getContext('2d');
+                    let w = img.width, h = img.height;
+                    const max = 1600;
+                    if ($('compress').checked) {
+                        if (w >= h && w > max) { h *= max / w; w = max; }
+                        else if (h > w && h > max) { w *= max / h; h = max; }
                     }
-
-                    canvas.width = width;
-                    canvas.height = height;
-                    ctx.drawImage(img, 0, 0, width, height);
-
-                    // Đóng dấu chữ nếu được chọn
-                    if (document.getElementById('watermark').checked) {
-                        ctx.font = "bold 24px Arial";
-                        ctx.fillStyle = "rgba(243, 156, 18, 0.6)"; // Màu cam Nền Móng VN
-                        ctx.fillText("Nền Móng Việt Nam", 20, height - 20);
-                        ctx.font = "14px Arial";
-                        ctx.fillText(new Date().toLocaleString(), 20, height - 50);
+                    canvas.width = w; canvas.height = h;
+                    ctx.drawImage(img, 0, 0, w, h);
+                    if ($('watermark').checked && proj.watermark) {
+                        const fs = Math.max(18, Math.round(w / 40));
+                        ctx.font = 'bold ' + fs + 'px Arial';
+                        ctx.fillStyle = 'rgba(255,255,255,0.75)';
+                        ctx.shadowColor = 'rgba(0,0,0,.6)'; ctx.shadowBlur = 4;
+                        ctx.fillText(proj.watermark, 20, h - 20);
+                        ctx.shadowBlur = 0;
                     }
-
-                    const quality = document.getElementById('compress').checked ? 0.7 : 1.0;
-                    resolve(canvas.toDataURL("image/jpeg", quality).split(',')[1]);
+                    resolve(canvas.toDataURL('image/jpeg', $('compress').checked ? 0.8 : 0.95).split(',')[1]);
                 };
-                img.src = event.target.result;
+                img.src = ev.target.result;
             };
             reader.readAsDataURL(file);
         });
@@ -108,45 +145,44 @@
 
     uploadBtn.onclick = async () => {
         const files = fileInput.files;
-        if (files.length === 0) return alert("Chưa chọn ảnh!");
-
+        if (!files.length) return alert('Chưa chọn ảnh!');
         uploadBtn.disabled = true;
-        let urls = [];
-        resultArea.innerHTML = "";
-        if(document.getElementById('showResult').checked) resultArea.style.display = "block";
+        const urls = [];
+        let loi = 0;
+        resultArea.innerHTML = '';
+        if ($('showResult').checked) resultArea.style.display = 'block';
 
         for (let i = 0; i < files.length; i++) {
-            status.innerText = `⚙️ Đang xử lý ${i+1}/${files.length}...`;
-            status.style.color = "#d35400";
-
-            const base64 = await processImage(files[i]);
-            const payload = {
-                base64: base64,
-                type: "image/jpeg",
-                name: "NMNV_" + Date.now() + ".jpg",
-                category: document.getElementById('category').value
-            };
-
+            status.innerText = `⚙️ Đang gửi ${i + 1}/${files.length}...`;
+            status.style.color = '#d35400';
             try {
-                const response = await fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify(payload) });
-                const res = await response.json();
-                if (res.status === "success") {
-                    urls.push(res.url);
-                    resultArea.innerHTML += `<div>✅ ${files[i].name} -> <a href="${res.url}" target="_blank">Link</a></div>`;
-                }
-            } catch (e) { console.error(e); }
+                const base64 = await processImage(files[i]);
+                const payload = {
+                    project: pid,
+                    base64: base64,
+                    type: 'image/jpeg',
+                    name: pid + '_' + Date.now() + '_' + (i + 1) + '.jpg',
+                    category: sel.value
+                };
+                const res = await (await fetch(endpoint, { method: 'POST', body: JSON.stringify(payload) })).json();
+                if (res.status !== 'success') throw new Error(res.message || 'lỗi');
+                urls.push(res.url);
+                resultArea.insertAdjacentHTML('beforeend', `<div>✅ ${files[i].name} → <a href="${res.url}" target="_blank">Link</a></div>`);
+            } catch (e) {
+                loi++;
+                resultArea.style.display = 'block';
+                resultArea.insertAdjacentHTML('beforeend', `<div>❌ ${files[i].name} gửi lỗi</div>`);
+            }
         }
 
-        status.innerText = "🚀 HOÀN THÀNH!";
-        status.style.color = "#27ae60";
-
-        if (document.getElementById('copyUrl').checked && urls.length > 0) {
-            navigator.clipboard.writeText(urls.join("\n"));
-            alert("Đã copy toàn bộ URL vào bộ nhớ tạm!");
+        status.innerText = loi ? `Xong, ${loi} ảnh lỗi - gửi lại các ảnh đó.` : '🚀 HOÀN THÀNH!';
+        status.style.color = loi ? '#c0392b' : '#27ae60';
+        if ($('copyUrl').checked && urls.length) {
+            try { await navigator.clipboard.writeText(urls.join('\n')); alert('Đã copy ' + urls.length + ' link!'); } catch (e) {}
         }
-        
         uploadBtn.disabled = false;
     };
+})();
 </script>
 
 </body>

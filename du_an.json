@@ -1,0 +1,162 @@
+{
+ "endpoint": "https://script.google.com/macros/s/AKfycbz1gfMBxNKrVUdAZQwUXF5snLuD4YqdJ7gFffNK-EArMIHV4ns0cOo1eL4VIGND14Dg5w/exec",
+ "_ghi_chu": "endpoint = Apps Script gộp (đã triển khai 20/11/2026). Dự án có endpoint riêng thì dùng script cũ. Khách mới: chỉ cần gửi link ?p=<ma-khach>, không cần khai báo ở đây.",
+ "projects": {
+  "ban-dinh": {
+   "ten": "Fanpage Bạn Định",
+   "mau": "#2980b9",
+   "watermark": "",
+   "categories": [
+    [
+     "San_Pham",
+     "Sản phẩm / hải sản"
+    ],
+    [
+     "Khach_Va_Hien_Truong",
+     "Khách & hiện trường"
+    ],
+    [
+     "Chung_Tu",
+     "Chứng từ, hóa đơn"
+    ]
+   ]
+  },
+  "ha-thao-moc": {
+   "ten": "Hà Thảo Mộc Ninh Bình",
+   "mau": "#27ae60",
+   "watermark": "",
+   "categories": [
+    [
+     "San_Pham",
+     "Sản phẩm / thảo mộc"
+    ],
+    [
+     "Khach_Va_Hien_Truong",
+     "Khách & hiện trường"
+    ],
+    [
+     "Chung_Tu",
+     "Chứng từ, hóa đơn"
+    ]
+   ]
+  },
+  "hoa-nha-tham": {
+   "ten": "Hoa Nhà Thắm Trần Sóc Sơn",
+   "mau": "#e84393",
+   "watermark": "",
+   "categories": [
+    [
+     "San_Pham",
+     "Hoa / sản phẩm"
+    ],
+    [
+     "Khach_Va_Hien_Truong",
+     "Khách & hiện trường"
+    ],
+    [
+     "Chung_Tu",
+     "Chứng từ, hóa đơn"
+    ]
+   ]
+  },
+  "khoan-coc": {
+   "ten": "Nền Móng Việt Nam",
+   "mau": "#f39c12",
+   "watermark": "Nền Móng Việt Nam",
+   "endpoint": "https://script.google.com/macros/s/AKfycbwUJV6jxJ6LiPVlp9y4n2UhhqyIRupZbeybhutoffJyp0qXxPEKp6IkTHV5y8Mzh7Fc/exec",
+   "categories": [
+    [
+     "May_Moc_Thiet_Bi",
+     "Máy móc & Thiết bị"
+    ],
+    [
+     "Nhan_Su_Cong_Truong",
+     "Nhân sự công trường"
+    ],
+    [
+     "Tien_Do_Thi_Cong",
+     "Tiến độ thi công"
+    ],
+    [
+     "Bien_Ban_Nghiem_Thu",
+     "Biên bản & Nghiệm thu"
+    ]
+   ]
+  },
+  "xe-khanh-quynh": {
+   "ten": "Xe Ghép Khánh Quỳnh",
+   "mau": "#16a085",
+   "watermark": "",
+   "endpoint": "https://script.google.com/macros/s/AKfycbzDz2aXhXup6i2tBsIDBJlAQc_rXenxMysp_wb8oTdY1c2g1Wi9dlgWNnVRPTNh907t/exec",
+   "categories": [
+    [
+     "Anh_Xe_Ngoai_That",
+     "Ảnh ngoại thất xe"
+    ],
+    [
+     "Anh_Xe_Noi_That",
+     "Ảnh nội thất xe"
+    ],
+    [
+     "Bien_Ban_Hop_Dong",
+     "Biên bản & hợp đồng"
+    ],
+    [
+     "Chi_Phi_Van_Hanh",
+     "Chi phí vận hành"
+    ],
+    [
+     "Hanh_Trinh_Khach_Hang",
+     "Hành trình & khách hàng"
+    ]
+   ]
+  },
+  "thanh-ly": {
+   "ten": "Thanh lý & Bể hải sản cũ",
+   "mau": "#8e44ad",
+   "watermark": "",
+   "endpoint": "https://script.google.com/macros/s/AKfycbwJSYyuuE5Rwhy18sH0xaURtUyBdDlm9HaS-zfcKn0TgoLQl5-rRbBEQE302T3K6ddaYg/exec",
+   "categories": [
+    [
+     "Be_Hai_San_Cu",
+     "Bể hải sản cũ"
+    ],
+    [
+     "May_Lam_Lanh_Chiller",
+     "Máy làm lạnh Chiller"
+    ],
+    [
+     "May_Moc_Thiet_Bi_Cong_Nghiep",
+     "Máy móc thiết bị công nghiệp"
+    ],
+    [
+     "Thanh_Ly_Nha_Xuong_Kho",
+     "Thanh lý nhà xưởng, kho"
+    ],
+    [
+     "Thiet_Bi_Bep_Inox",
+     "Thiết bị bếp inox"
+    ],
+    [
+     "Hoa_Don_Chung_Tu",
+     "Hóa đơn, chứng từ"
+    ]
+   ]
+  }
+ },
+ "mac_dinh_nhom": [
+  [
+   "San_Pham",
+   "Sản phẩm"
+  ],
+  [
+   "Khach_Va_Hien_Truong",
+   "Khách & hiện trường"
+  ],
+  [
+   "Chung_Tu",
+   "Chứng từ, hóa đơn"
+  ]
+ ],
+ "mac_dinh": "khoan-coc"
+}
