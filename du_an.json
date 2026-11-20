@@ -133,6 +133,24 @@
      "Hóa đơn, chứng từ"
     ]
    ]
+  },
+  "gym": {
+   "ten": "Ảnh Gym",
+   "watermark": "",
+   "categories": [
+    [
+     "Anh_Tap_Luyen",
+     "Ảnh tập luyện"
+    ],
+    [
+     "Anh_Su_Kien",
+     "Ảnh sự kiện, nhóm"
+    ],
+    [
+     "Anh_Khac",
+     "Ảnh khác"
+    ]
+   ]
   }
  },
  "mac_dinh_nhom": [
